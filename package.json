@@ -1,9 +1,10 @@
 {
   "name": "heroku",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple Express application for Heroku",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,5 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2"
+  },
+  "engines": {
+    "node": "14.x",
+    "npm": "6.x"
   }
 }
