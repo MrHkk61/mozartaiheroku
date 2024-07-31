@@ -1,0 +1,14 @@
+# .htaccess dosyası
+
+# apple-app-site-association dosyasının JSON olarak sunulması
+<Files "apple-app-site-association">
+    Header set Content-Type application/json
+</Files>
+
+# PHP sunucusu için yeniden yazma kuralları
+RewriteEngine On
+
+# Tüm istekleri index.php dosyasına yönlendirin
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
