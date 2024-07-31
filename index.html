@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Mozart AI - Create Your Own Music In Seconds!</title>
+                <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/songai-45696.appspot.com/o/website%2Ffavicon.ico?alt=media&token=41f2e137-4f18-4a45-96d4-9016b5e70cbf" type="image/x-icon">
+                    <link rel="icon" type="image/png" sizes="32x32" href="https://firebasestorage.googleapis.com/v0/b/songai-45696.appspot.com/o/website%2Ffavicon-32x32.png?alt=media&token=156bb2a6-483c-4e73-963d-3e4c5b004440">
+                        <link rel="icon" type="image/png" sizes="16x16" href="https://firebasestorage.googleapis.com/v0/b/songai-45696.appspot.com/o/website%2Ffavicon-16x16.png?alt=media&token=cbcda510-235a-4ae4-b7f5-3d1dbe302585">
+                            <link rel="preconnect" href="https://fonts.googleapis.com">
+                            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                            <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+                            <link rel="stylesheet" href="styles.css">
+                                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer"
+                                />
+ <style>
+     html, body {
+       margin: 0;
+       padding: 0;
+       width: 100%;
+       height: 100%;
+       overflow: hidden;
+     }
+     body {
+         font-family: 'Open Sans', sans-serif;
+         background: #121212;
+         display: flex;
+         justify-content: center;
+         align-items: flex-start;
+         margin: 0;
+         overflow-y: auto;
+     }
+
+     @keyframes gradientAnimation {
+         0% {
+             background-position: 0% 0%;
+         }
+
+         50% {
+             background-position: 100% 100%;
+         }
+
+         100% {
+             background-position: 0% 0%;
+         }
+     }
+     .banner {
+         background: linear-gradient(270deg, #C5C9FC, #F9CAFD);
+         background-size: 400% 400%;
+         animation: gradientAnimation 3s ease infinite;
+         color: #121212;
+         text-align: left;
+         padding: 1.5vh 0;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         border-radius: 0px;
+         z-index: 1000;
+     }
+     @keyframes gradientAnimation {
+         0% {
+             background-position: 0% 50%;
+         }
+         50% {
+             background-position: 100% 50%;
+         }
+         100% {
+             background-position: 0% 50%;
+         }
+     }
+     
+     .banner-content {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         width: 90%;
+         margin: 0 auto;
+         padding: 0 4vw;
+     }
+     
+     .banner-logo {
+         height: 40px; /* Logo boyutunu ayarlayın */
+         border-radius: 8px;
+         margin-right: 8px; /* Text ile logo arasındaki boşluğu ayarlayın */
+         vertical-align: middle; /* Logo ve text hizalamasını ayarlayın */
+     }
+     
+     .banner-text {
+         display: flex;
+         flex-direction: column;
+         flex-grow: 1;
+     }
+     .main-text {
+         font-size: 14px; /* Ana metin boyutunu ayarlayın */
+         font-weight: 700; /* Ana metin kalınlığını ayarlayın */
+         color: #121212;
+     }
+     .sub-text {
+         font-size: 12px; /* Alt metin boyutunu ayarlayın */
+         margin-top: 4px; /* Alt metin üst boşluğunu ayarlayın */
+         color: #121212;
+         font-weight: 600;
+     }
+     .get-button {
+         background-color: #22264B; /* Buton arka plan rengini ayarlayın */
+         color: #F6F6F6;
+         border: none;
+         border-radius: 8px;
+         padding: 2vh 2.5vw; /* Buton iç boşluklarını ayarlayın */
+         font-size: 14px; /* Buton yazı boyutunu ayarlayın */
+         font-weight: 800;
+         cursor: pointer;
+         text-transform: uppercase; /* Yazıyı büyük harf yapın */
+     }
+
+     .banner a {
+         color: #F6F6F6;
+         text-decoration: none;
+         font-weight: bold;
+     }
+
+     .player {
+         border-radius: 8px;
+         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+         overflow: hidden;
+         width: 100%;
+         height: auto;
+         padding: 2vw;
+         padding-top: 7vh;
+         background-size: 200% 200%;
+         background-image: linear-gradient(180deg, #2B3D7A 20%, #750026 100%);
+         animation: gradientAnimation 30s linear infinite;
+         position: relative;
+         margin: 3vh auto;
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         box-sizing: border-box;
+         transform-origin: top;
+     }
+
+     .wrapper {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         width: 100%;
+         height: auto;
+         overflow-y: auto;
+     }
+
+     #imageContainer {
+         margin-top: 2vh;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         width: 100%;
+         margin: 2vw 0;
+     }
+
+     #albumImage {
+         max-height: 60vh;
+         width: auto;
+         max-width: 50%;
+         border-radius: 12px;
+         display: block;
+         margin: 0 auto;
+         object-fit: contain;
+         box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+     }
+
+     .download-container {
+         display: flex;
+         justify-content: center;
+         margin: 8px;
+         width: 100%;
+     }
+
+     .download-container img {
+         width: 170px;
+         height: auto;
+         cursor: pointer;
+     }
+
+     .info-container {
+         display: flex;
+         flex-direction: column;
+         align-items: flex-start;
+         width: 100%;
+         padding-top: 4vh;
+         box-sizing: border-box;
+         padding-left: 20px;
+         padding-right: 20px;
+     }
+
+     .info {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         text-align: left;
+         margin-bottom: 10px;
+         width: 100%;
+     }
+
+     .info h1 {
+         font-size: 20px;
+         margin: 0;
+         color: #F6F6F6;
+     }
+
+     .info p {
+         color: #F6F6F6;
+         margin: 0;
+         font-size: 14px;
+     }
+     
+     #titleText {
+       margin-right: 10px;
+     }
+     .actions {
+       display: flex;
+       gap: 2vw;
+       margin-left: auto;
+     }
+     .action-icon {
+       background: none;
+       border: none;
+       font-size: 24px;
+       cursor: pointer;
+       padding: 1vw;
+       color: #F6F6F6;
+     }
+
+     .progress-container {
+         display: flex;
+         flex-direction: column;
+         width: 100%;
+         margin-top: 2vh;
+     }
+
+     .progress {
+         height: 6px;
+         background-color: #444;
+         border-radius: 5px;
+         overflow: hidden;
+         position: relative;
+         width: 100%;
+         cursor: pointer;
+     }
+
+     .progress-bar {
+         height: 100%;
+         background-color: #F6F6F6;
+         width: 0;
+     }
+
+     .time-container {
+         display: flex;
+         justify-content: space-between;
+         width: 100%;
+         margin-top: 5px;
+        /* padding-left: 20px;
+         padding-right: 20px; */
+         box-sizing: border-box;
+         
+     }
+
+     #currentTime,
+     #duration {
+         font-size: 12px;
+         color: #F6F6F6;
+     }
+
+     .play-button {
+         background-color: #F6F6F6;
+         color: #000000;
+         border: none;
+         border-radius: 50%;
+         padding: 15px;
+         font-size: 24px;
+         cursor: pointer;
+         margin-top: 2vh;
+         transition: background-color 0.3s, transform 0.3s;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+     }
+
+     .play-button:hover {
+         background-color: #f0f0f0;
+         transform: scale(1.05);
+     }
+
+     #playPauseIcon {
+         color: #000000;
+         font-size: 24px;
+         width: 24px;
+         height: 24px;
+     }
+     
+     #lyricsContainer {
+         padding-left: 20px;
+         padding-right: 20px;
+         box-sizing: border-box;
+     }
+     
+     .lyrics {
+         background: linear-gradient(to right bottom, #22264B 0%, #2B3D7A 50%, #2B3D7A 100%);
+         margin-top: 2.5vh;
+         border-radius: 20px;
+         padding: 16px;
+         width: calc(100% - 40px);
+         position: relative;
+         overflow: hidden;
+         scrollbar-width: thin;
+         scrollbar-color: #587BF6 #2B3D7A;
+         transition: max-height 0.3s ease;
+         box-sizing: border-box;
+     }
+
+     .lyrics.show-gradient::after {
+         content: '';
+         position: absolute;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         height: 70%; /* Yükseklik ayarlanabilir */
+         background: linear-gradient(to top, #2B3D7A, transparent);
+     }
+
+
+     .lyrics-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 10px;
+     }
+
+     .lyrics-title {
+         font-size: 16px;
+         font-weight: bold;
+         color: #F6F6F6;
+     }
+
+     .toggle-button {
+         background-color: transparent;
+         border: none;
+         color: #F6F6F6;
+         cursor: pointer;
+         font-size: 16px;
+     }
+
+     .download-button {
+         background-color: #1E2A78;
+         color: #F6F6F6;
+         border: 2px solid transparent;
+         border-radius: 16px;
+         padding: 2vh 2vw;
+         font-size: 16px;
+         font-weight: 600;
+         cursor: pointer;
+         margin-top: -10px;
+         width: 100%;
+         height: 8vh;
+         text-align: center;
+         position: relative;
+         z-index: 1;
+         background: linear-gradient(#1E2A78, #1E2A78) padding-box,
+                         linear-gradient(270deg, #EA43FB, #2B39CD) border-box;
+         background-size: 200% 200%;
+         animation: borderAnimation 3s ease infinite;
+         display: flex;
+         align-items: baseline;
+         justify-content: center;
+         gap: 8px;
+     }
+     @keyframes borderAnimation {
+         0% {
+             background-position: 0% 50%;
+         }
+         50% {
+             background-position: 100% 50%;
+         }
+         100% {
+             background-position: 0% 50%;
+         }
+     }
+     .apple-logo {
+         font-size: 20px;
+         margin-right: 4px;
+     }
+
+     .download-button:hover {
+         background-color: #2B39CD;
+         border-color: #F6F6F6;
+         color: #F6F6F6;
+     }
+
+     .lyrics p {
+         font-family: 'Open Sans', sans-serif;
+         font-weight: 400;
+         font-size: 16px;
+         line-height: 1.5;
+         white-space: pre-wrap;
+         color: #F6F6F6;
+         margin: 0;
+     }
+
+     .full-lyrics {
+         display: none;
+     }
+
+     }
+     .logo-container {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         margin-top: 1.5 vh;
+         margin-bottom: 1.5vh;
+         gap: 8px;
+     }
+
+     .logo-row {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 8px;
+     }
+
+     .player .wrapper .app-logo {
+         width: 50px;
+         height: auto;
+         margin: 0;
+     }
+
+     .app-name {
+         font-size: 8vw;
+         font-weight: bold;
+         color: #F6F6F6;
+         margin-left: 0;
+         background-size: 200% 200%;
+         background-image: linear-gradient(90deg, #f6f6f6 25%, #f3f3f3 100%);
+         animation: gradientAnimation 5s linear infinite;
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+     }
+
+     .subtitle {
+         text-align: center;
+         color: #F6F6F6;
+         font-size: 16px;
+         font-weight: 600;
+         margin: 0;
+         padding: 0;
+     }
+
+     .loading-spinner {
+         border: 4px solid #f3f3f3;
+         border-top: 4px solid #3498db;
+         border-radius: 50%;
+         width: 40px;
+         height: 40px;
+         animation: spin 1s linear infinite;
+         position: relative;
+         margin-top: 10vh;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         display: none;
+         z-index: 1000;
+     }
+     
+ </style>
+                                    
+    </head>
+    <body>
+        <div class="banner">
+          <a href="https://apps.apple.com/app/apple-store/id6502656704?pt=126985321&ct=Share&mt=8" target="_blank" class="banner-content">
+            <img src="assets/mozartLogo.jpg" alt="Logo" class="banner-logo">
+                <div class="banner-text">
+                      <div class="main-text">Make Your Own Music & AI Song</div>
+                      <div class="sub-text">Turn your photos into a song!</div>
+                </div>
+                      <button class="get-button" onclick="window.location.href='https://apps.apple.com/app/apple-store/id6502656704?pt=126985321&ct=Share&mt=8';">GET</button>
+          </a>
+        </div>
+
+        <div id="player" class="player">
+          <div class="wrapper">
+            <div class="logo-container">
+              <div class="logo-row">
+                <span class="app-name">Mozart AI</span>
+              </div>
+            </div>
+                <div id="imageContainer">
+                    <div id="loadingSpinner" class="loading-spinner"></div>
+                    <img id="albumImage" src="#" alt="Album Image">
+                </div>
+                <div class="info-container">
+                    <div class="info">
+                        <h1 id="titleText">Mozart AI</h1>
+                        <p id="authorText"></p>
+                        <div class="actions">
+                            <a href="https://apps.apple.com/app/apple-store/id6502656704?pt=126985321&ct=Share&mt=8" target="_blank" class="action-icon thumbsup-icon"><i class="fas fa-thumbs-up"></i></a>
+                            <button class="action-icon share-icon"><i class="fas fa-share"></i></button>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress" id="progressContainer">
+                            <div id="progressBar" class="progress-bar"></div>
+                        </div>
+                        <div class="time-container">
+                            <span id="currentTime">0:00</span>
+                            <span id="duration">0:00</span>
+                        </div>
+                    </div>
+                </div>
+                <button id="playPauseButton" class="play-button">
+                    <i id="playPauseIcon" class="fas fa-play"></i>
+                </button>
+                <div class="lyrics" id="lyricsContainer">
+                    <div class="lyrics-header">
+                        <span class="lyrics-title">Lyrics</span>
+                        <button id="toggleLyricsButton" class="toggle-button">Show More</button>
+                    </div>
+                    <div id="lyricsContent">
+                        <p id="shortLyrics">Some of the lyrics will be displayed here...</p>
+                        <p id="fullLyrics" style="display: none;">Full lyrics will be displayed here.</p>
+                    </div>
+                    <button id="downloadButton" class="download-button" style="display: none;" onclick="window.location.href='https://apps.apple.com/app/apple-store/id6502656704?pt=126985321&ct=Share&mt=8';">
+                        <i class="fab fa-apple apple-logo"></i>
+                        For more, download Mozart AI
+                    </button>
+                </div>
+                <audio id="audioPlayer">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const playPauseButton = document.getElementById('playPauseButton');
+                const playPauseIcon = document.getElementById('playPauseIcon');
+                const audioPlayer = document.getElementById('audioPlayer');
+                const progressBar = document.getElementById('progressBar');
+                const progressContainer = document.getElementById('progressContainer');
+                const currentTimeElement = document.getElementById('currentTime');
+                const durationElement = document.getElementById('duration');
+                const toggleLyricsButton = document.getElementById('toggleLyricsButton');
+                const shortLyrics = document.getElementById('shortLyrics');
+                const fullLyrics = document.getElementById('fullLyrics');
+                const downloadButton = document.getElementById('downloadButton');
+                const lyricsContainer = document.getElementById('lyricsContainer');
+                const lyricsContent = document.getElementById('lyricsContent');
+                const shareIcon = document.querySelector('.share-icon');
+                    if (shareIcon) {
+                        shareIcon.addEventListener('click', shareUrl);
+                    }
+
+                    function shareUrl() {
+                        const url = window.location.href;
+                        const title = document.title;
+
+                        if (navigator.share) {
+                            navigator.share({
+                                title: title,
+                                url: url
+                            }).then(() => {
+                                console.log('Thanks for sharing!');
+                            }).catch(console.error);
+                        } else {
+                            // Web Share API desteklenmiyorsa, URL'i panoya kopyalar
+                            const dummy = document.createElement('input');
+                            document.body.appendChild(dummy);
+                            dummy.value = url;
+                            dummy.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(dummy);
+                            alert('URL copied to clipboard!');
+                        }
+                    }
+                
+                playPauseButton.addEventListener('click', function () {
+                    if (audioPlayer.paused) {
+                        audioPlayer.play();
+                        playPauseIcon.classList.remove('fa-play');
+                        playPauseIcon.classList.add('fa-pause');
+                    } else {
+                        audioPlayer.pause();
+                        playPauseIcon.classList.remove('fa-pause');
+                        playPauseIcon.classList.add('fa-play');
+                    }
+                    
+                });
+                
+                function limitTitle() {
+                      const titleElement = document.getElementById('titleText');
+                      if (titleElement) {
+                        let title = titleElement.textContent;
+                        // Sadece harfleri ve boşlukları koru, diğer karakterleri kaldır
+                        title = title.replace(/[^a-zA-Z\s]/g, '');
+                        // İlk 4 kelimeyi al
+                        let words = title.split(/\s+/).slice(0, 4);
+                        // Başlığı güncelle
+                        titleElement.textContent = words.join(' ');
+                      }
+                    }
+
+                
+                audioPlayer.addEventListener('timeupdate', function () {
+                    const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                    progressBar.style.width = `${progressPercent}%`;
+                    
+                    const currentTime = formatTime(audioPlayer.currentTime);
+                    const duration = formatTime(audioPlayer.duration);
+                    
+                    currentTimeElement.textContent = currentTime;
+                    durationElement.textContent = duration;
+                });
+                
+                progressContainer.addEventListener('click', function (e) {
+                    const width = progressContainer.clientWidth;
+                    const clickX = e.offsetX;
+                    const duration = audioPlayer.duration;
+                    
+                    audioPlayer.currentTime = (clickX / width) * duration;
+                });
+                
+                function formatTime(seconds) {
+                    const minutes = Math.floor(seconds / 60);
+                    const secs = Math.floor(seconds % 60);
+                    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+                }
+                
+                toggleLyricsButton.addEventListener('click', function () {
+                    if (fullLyrics.style.display === 'none' || fullLyrics.style.display === '') {
+                        fullLyrics.style.display = 'block';
+                        shortLyrics.style.display = 'none';
+                        toggleLyricsButton.textContent = 'Show Less';
+                        downloadButton.style.display = 'block'; // Show download button
+                        lyricsContainer.style.maxHeight = 'none'; // Remove height restriction
+                        lyricsContainer.classList.add('show-gradient'); // Gradient class ekle
+                    } else {
+                        fullLyrics.style.display = 'none';
+                        shortLyrics.style.display = 'block';
+                        toggleLyricsButton.textContent = 'Show More';
+                        downloadButton.style.display = 'none'; // Hide download button
+                        lyricsContainer.style.maxHeight = '15vh'; // Set to default collapsed height
+                        lyricsContainer.classList.remove('show-gradient'); // Gradient class çıkar
+                    }
+                });
+
+                
+                async function fetchJsonFile(url) {
+                    console.log(`Fetching JSON file from: ${url}`);
+                    try {
+                        const response = await fetch(url);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        const data = await response.json();
+                        console.log('Content fetched:', data);
+                        return data;
+                    } catch (error) {
+                        console.error('Error fetching the JSON file:', error);
+                        return null;
+                    }
+                }
+                
+                async function loadContent() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    let file = urlParams.get('file');
+                    console.log(`File URL from params: ${file}`);
+                    
+                    if (file) {
+                        file = file.replace('/share/', '/share%2F');
+                        console.log(`Modified File URL: ${file}`);
+                        
+                        try {
+                            const content = await fetchJsonFile(file);
+                            if (content) {
+                                const { mp3, img, title, lyric, author } = content;
+                                
+                                if (mp3) {
+                                    document.getElementById('audioPlayer').src = mp3;
+                                }
+                                if (img) {
+                                    const albumImage = document.getElementById('albumImage');
+                                    albumImage.src = img;
+                                    
+                                    albumImage.onload = function () {
+                                        applyVibrantColors(img);
+                                    }
+                                }
+                                if (title) {
+                                                        const titleText = toTitleCase(title);
+                                                        document.getElementById('titleText').textContent = titleText;
+                                                        const firstFourWords = titleText.match(/\b\w+\b/g).slice(0, 4).join(" ")
+                                                        document.getElementById('titleText').textContent = firstFourWords;
+                                                    }
+                              
+                                if (lyric) {
+                                    const firstFewLines = lyric.split('\n').slice(0, 2).join('\n'); // Show first 2 lines by default
+                                    const nextFewLines = lyric.split('\n').slice(0, 8).join('\n'); // Show first 4 lines when expanded
+                                    document.getElementById('shortLyrics').innerText = firstFewLines + '...';
+                                    document.getElementById('fullLyrics').innerText = nextFewLines;
+                                }
+                                if (author) {
+                                    document.getElementById('authorText').textContent = `by ${author}`;
+                                }
+                            } else {
+                                document.getElementById('shortLyrics').textContent = 'An error occurred while fetching the content. Please check the console for more details.';
+                                document.getElementById('fullLyrics').textContent = '';
+                            }
+                        } catch (error) {
+                            console.error('Error loading content:', error);
+                            document.getElementById('shortLyrics').textContent = 'An error occurred while fetching the content. Please check the console for more details.';
+                            document.getElementById('fullLyrics').textContent = '';
+                        }
+                    } else {
+                        document.getElementById('shortLyrics').textContent = 'No file URL provided.';
+                        document.getElementById('fullLyrics').textContent = '';
+                    }
+                }
+                
+                function toTitleCase(str) {
+                        return str.replace(
+                            /\w\S*/g,
+                            function(txt) {
+                                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                            }
+                        );
+                    }
+                
+                const albumImage = document.getElementById('albumImage');
+                const loadingSpinner = document.getElementById('loadingSpinner');
+                
+                function showSpinner() {
+                    loadingSpinner.style.display = 'block';
+                    console.log('Showing spinner');
+                }
+                
+                function hideSpinner() {
+                    loadingSpinner.style.display = 'none';
+                    console.log('Hiding spinner');
+                }
+                
+                function checkImageLoaded() {
+                    console.log('Checking image load status');
+                    console.log('Image complete:', albumImage.complete);
+                    console.log('Image naturalWidth:', albumImage.naturalWidth);
+                    
+                    if (albumImage.complete && albumImage.naturalWidth > 0) {
+                        hideSpinner();
+                    } else {
+                        showSpinner();
+                        albumImage.addEventListener('load', function () {
+                            console.log('Image loaded');
+                            hideSpinner();
+                        });
+                        albumImage.addEventListener('error', function () {
+                            console.log('Error loading image');
+                            hideSpinner();
+                        });
+                    }
+                }
+                
+                
+                function loadAlbumImage(imageUrl) {
+                    console.log('Loading new image:', imageUrl);
+                    showSpinner();
+                    albumImage.src = imageUrl;
+                    checkImageLoaded();
+                }
+                
+                const observer = new MutationObserver(function (mutations) {
+                    mutations.forEach(function (mutation) {
+                        if (mutation.type === "attributes" && mutation.attributeName === "src") {
+                            console.log('Image src changed:', albumImage.src);
+                            checkImageLoaded();
+                        }
+                    });
+                });
+                
+                observer.observe(albumImage, { attributes: true });
+                
+                loadContent();
+            });
+        </script>
+    </body>
+</html>
+
+
+
+
